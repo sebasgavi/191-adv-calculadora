@@ -1,0 +1,10 @@
+.Display{
+    background: white;
+    padding: 1em;
+    text-align: right;  
+}
+
+.Display h3,
+.Display h2{
+    margin: 0;
+}
