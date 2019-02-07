@@ -18,9 +18,16 @@ class App extends Component {
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
+  /**
+   * Retorna el resultado de una cadena de operaciones
+   * @param {string[]} chain 
+   */
   operateChain(chain){
     let res = [];
 
+    /**
+     * Primero operamos sobre multiplicaciones y divisiones, ignoramos el resto
+     */
     for(let index = 0; index < chain.length; index++){
       let elem = chain[index];
       switch(elem){
@@ -37,6 +44,9 @@ class App extends Component {
       }
     };
 
+    /**
+     * Operamos sumas y restas
+     */
     let total = res[0];
     for(let index = 0; index < res.length; index++){
       let elem = res[index];
@@ -49,6 +59,12 @@ class App extends Component {
     return total;
   }
 
+  /**
+   * Retorna el resultado de una operación entre dos números
+   * @param {string} numA 
+   * @param {string} numB 
+   * @param {string} operation 
+   */
   operate(numA, numB, operation){
     numA = parseFloat(numA);
     numB = parseFloat(numB);
