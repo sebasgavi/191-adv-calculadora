@@ -10,11 +10,43 @@ class App extends Component {
 
     this.state = {
       current: '',
-      previous: null,
-      operation: null,
+      chain: [],
+      //previous: null,
+      //operation: null,
     };
 
     this.handleButtonClick = this.handleButtonClick.bind(this);
+  }
+
+  operateChain(chain){
+    let res = [];
+
+    for(let index = 0; index < chain.length; index++){
+      let elem = chain[index];
+      switch(elem){
+        case '*':
+        case '/':
+          let last = res[res.length - 1];
+          res[res.length - 1] = this.operate(last, chain[index + 1], elem);
+          index++;
+          break;
+
+        default:
+          res.push(elem);
+          break;
+      }
+    };
+
+    let total = res[0];
+    for(let index = 0; index < res.length; index++){
+      let elem = res[index];
+      if(elem == '+' || elem == '-'){
+        total = this.operate(total, res[index + 1], elem);
+        index++;
+      }
+    }
+
+    return total;
   }
 
   operate(numA, numB, operation){
@@ -26,6 +58,10 @@ class App extends Component {
         return numA + numB;
       case '-':
         return numA - numB;
+      case '*':
+        return numA * numB;
+      case '/':
+        return numA / numB;
     }
   }
 
@@ -36,21 +72,25 @@ class App extends Component {
     switch (symbol){
       case '+':
       case '-':
-        this.setState((prevState) => {
+        this.setState(({ current, chain }) => {
+          if(!current) return;
+          chain.push(current);
+          chain.push(symbol);
           return {
-            previous: prevState.current,
             current: '',
-            operation: symbol,
+            chain: chain,
+            //previous: prevState.current,
+            //operation: symbol,
           }
         });
         break;
 
-      case '=': 
+      case '=':
         this.setState(({ previous, current, operation }) => {
+          if(!previous || !current || !operation) return;
           return {
             previous: null,
             current: this.operate(previous, current, operation),
-            //current: parseInt(previous) - parseInt(current),
             operation: null,
           }
         });
@@ -71,14 +111,15 @@ class App extends Component {
     return (<article className="App">
       <Display 
         currentDisplay={this.state.current}
-        previousDisplay={this.state.previous}
-        operationDisplay={this.state.operation} />
+        chain={this.state.chain} />
       
       <Button click={this.handleButtonClick} symbol="1" />
       <Button click={this.handleButtonClick} symbol="2" />
       <Button click={this.handleButtonClick} symbol="3" />
       <Button click={this.handleButtonClick} symbol="+" />
       <Button click={this.handleButtonClick} symbol="-" />
+      <Button click={this.handleButtonClick} symbol="*" />
+      <Button click={this.handleButtonClick} symbol="/" />
       <Button click={this.handleButtonClick} symbol="=" />
     </article>);
   }
