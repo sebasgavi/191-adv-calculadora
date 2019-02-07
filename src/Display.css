@@ -4,6 +4,17 @@
     text-align: right;  
 }
 
+
+.Display h3{
+    font-size: 1.5em;
+    min-height: 1.3em;
+}
+
+.Display h2{
+    font-size: 2em;
+    min-height: 1.5em;
+}
+
 .Display h3,
 .Display h2{
     margin: 0;

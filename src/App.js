@@ -11,9 +11,22 @@ class App extends Component {
     this.state = {
       current: '',
       previous: null,
+      operation: null,
     };
 
     this.handleButtonClick = this.handleButtonClick.bind(this);
+  }
+
+  operate(numA, numB, operation){
+    numA = parseFloat(numA);
+    numB = parseFloat(numB);
+
+    switch(operation){
+      case '+':
+        return numA + numB;
+      case '-':
+        return numA - numB;
+    }
   }
 
   handleButtonClick(symbol){
@@ -21,11 +34,24 @@ class App extends Component {
       current: this.state.current + symbol,
     });*/
     switch (symbol){
-      case '+': 
+      case '+':
+      case '-':
         this.setState((prevState) => {
           return {
             previous: prevState.current,
-            current: ''
+            current: '',
+            operation: symbol,
+          }
+        });
+        break;
+
+      case '=': 
+        this.setState(({ previous, current, operation }) => {
+          return {
+            previous: null,
+            current: this.operate(previous, current, operation),
+            //current: parseInt(previous) - parseInt(current),
+            operation: null,
           }
         });
         break;
@@ -46,12 +72,14 @@ class App extends Component {
       <Display 
         currentDisplay={this.state.current}
         previousDisplay={this.state.previous}
-        operationDisplay="+" />
+        operationDisplay={this.state.operation} />
       
       <Button click={this.handleButtonClick} symbol="1" />
       <Button click={this.handleButtonClick} symbol="2" />
       <Button click={this.handleButtonClick} symbol="3" />
       <Button click={this.handleButtonClick} symbol="+" />
+      <Button click={this.handleButtonClick} symbol="-" />
+      <Button click={this.handleButtonClick} symbol="=" />
     </article>);
   }
 }
